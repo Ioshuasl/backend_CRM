@@ -3,7 +3,7 @@ import sequelize from "../Config/database.js";
 
 // Define o modelo FormaPagamento
 const FormaPagamento = sequelize.define('FormaPagamento', {
-  formaPagamento: {
+  nomeFormaPagamento: {
     type: DataTypes.STRING,
     allowNull: false,
   }
