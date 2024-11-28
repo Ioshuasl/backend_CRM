@@ -1,15 +1,13 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../Config/database.js";
 import CategoriaProduto from "./categoriaProdutoModel.js";
+import EstoqueProduto from "./estoqueProdutoModel.js";
 
 // Define o modelo Produto
 const Produto = sequelize.define('Produto', {
   nomeProduto: {
     type: DataTypes.STRING,
     allowNull: false,
-  },
-  quantidadeEstoqueProduto: {
-    type: DataTypes.INTEGER,
   },
   valorProduto: {
     type: DataTypes.DOUBLE,
@@ -27,5 +25,7 @@ const Produto = sequelize.define('Produto', {
   tableName: 'produtos',  // Mapeia para a tabela 'produtos' no banco
   timestamps: true,     // Adiciona colunas de createdAt e updatedAt
 });
+
+Produto.hasOne(EstoqueProduto, {foreignKey: produto_id})
 
 export default Produto;

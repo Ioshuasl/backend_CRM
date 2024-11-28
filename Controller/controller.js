@@ -3,6 +3,7 @@ import Venda from "../Models/vendaModel.js";
 import Produto from "../Models/produtoModel.js";
 import CategoriaProduto from "../Models/categoriaProdutoModel.js";
 import FormaPagamento from "../Models/formaPagamentoModel.js";
+import EstoqueProduto from "../Models/estoqueProdutoModel.js";
 
 class Controller{
 
@@ -27,14 +28,21 @@ class Controller{
     }
 
     //funcao para cadstrar novos produtos
-    async createProduto(nomeProduto,quantidadeEstoqueProduto,valorProduto,categoriaProduto_id){
-        const produto = await Produto.create(nomeProduto,quantidadeEstoqueProduto,valorProduto,categoriaProduto_id)
+    async createProduto(nomeProduto,estoqueProduto,valorProduto,categoriaProduto_id){
+        const produto = await Produto.create(nomeProduto,valorProduto,categoriaProduto_id)
+
+        await EstoqueProduto.create({
+            produto_id: produto.id,
+            quantidadeEstoqueProduto: estoqueProduto
+        })
         return {message:"Produto criado com sucesso:",produto}
     }
 
     //funcao para mostrar todos os produtos
     async findAllProdutos(){
-        const produtos = Produto.findAll()
+        const produtos = Produto.findAll({
+            include:EstoqueProduto
+        })
         return produtos
     }
 
@@ -99,7 +107,11 @@ class Controller{
 
     //funcao para mostrar Vendas cadastrado
     async findAllVendas(){
-        const vendas = await Venda.findAll()
+        const vendas = await Venda.findAll({
+            include: Venda,
+            include: Cliente,
+            include: FormaPagamento
+        })
         return vendas
     }
 
@@ -112,9 +124,33 @@ class Controller{
     }
 
     //funcao para buscar todos os Produtos dependendo da CategoriaProduto
-    //precisa criar uma tabela de estoque que referencia um produto, vai ser mais facil para programar tendo uma tabela para estoque para cada produto
+    async findAllProdutoByCategoriaProdutoId(categoriaProduto_id){
+        const produtos = await Produto.findAll({where:{
+            categoriaProduto_id: categoriaProduto_id
+        }})
+        return produtos
+    }
+
     //funcao para buscar todas as Vendas com o id de um cliente tal
+    async findVendasByCliente(id){
+        const vendas = await Venda.findAll({
+            where:{cliente_id:id},
+            include: Cliente
+        })
+        return vendas
+    }
+
+    //funcao para vendas que usaram tal forma de pagamento
+    async findVendasByFormaPagamentoid(id){
+        const vendas = Venda.findAll({
+            where:{formaPagamento_id:id},
+            include:FormaPagamento
+        })
+        return vendas
+    }
+    
     //funcao para buscar a quantidade de venda de um produto tal
+
 }
 
 export default new Controller()
