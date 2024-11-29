@@ -20,6 +20,10 @@ class Controller{
     }
 
     //funcao para fazer update no cliente
+    async updateCliente(id, updatedData){
+        const cliente = await Cliente.update(updatedData, {where: id})
+        return cliente
+    }
 
     //funcao para excluir cliente
     async deleteCliente(id){
@@ -47,6 +51,11 @@ class Controller{
     }
 
     //funcao para fazer update em um produto
+    async updateProduto(id, updatedData){
+        const cliente = await Produto.update(updatedData, {where: id})
+        return cliente
+    }
+
     
     //funcao para deletar produto
     async deleteProduto(id){
@@ -67,6 +76,9 @@ class Controller{
     }
 
     //funcao para dar update em uma categoria de produto
+    async updateCategoriaProduto(id, updatedData){
+        const categoriaProduto = await CategoriaProduto.update(updatedData,{where:id})
+    }
 
     //funcao para deletar uma categoria de produto
     async deleteCategoriaProduto(id){
@@ -74,23 +86,27 @@ class Controller{
         //antes de deletar precisa fazer uma funcao para verificar se nao tem nenhum Produto 
         //vinculado a aquela categoria de produto
 
-        const categoriaProduto = CategoriaProduto.destroy({where:{id}})
+        const categoriaProduto = await CategoriaProduto.destroy({where:{id}})
         return {message:"Categoria de produto deletado com sucesso"}
     }
 
     //funcao para cadastrar Forma de Pagamento
     async createFormaPagamento(nomeFormaPagamento){
-        const formaPagamento = FormaPagamento.create(nomeFormaPagamento)
-        return {message:"Forma de pagamento criada com sucesso"}
+        const formaPagamento = await FormaPagamento.create(nomeFormaPagamento)
+        return {message:"Forma de pagamento criada com sucesso",formaPagamento}
     }
 
     //funcao para mostrar Formas de Pagamento cadastrado
     async findAllFormaPagamento(){
-        const formaPagamentos = FormaPagamento.findAll()
+        const formaPagamentos = await FormaPagamento.findAll()
         return formaPagamentos
     }
 
     //funcao para dar update em Forma de Pagamento
+    async updateFormaPagamento(id,updatedData){
+        const formaPagamento = await FormaPagamento.update(updatedData,{where:id});
+        return formaPagamento
+    }
 
     //funcao para deletar Forma de Pagamento
     async deleteFormaPagamento(id){
