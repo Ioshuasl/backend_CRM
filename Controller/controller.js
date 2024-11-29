@@ -20,8 +20,8 @@ class Controller{
     }
 
     //funcao para fazer update no cliente
-    async updateCliente(id, updatedData){
-        const cliente = await Cliente.update(updatedData, {where: id})
+    async updateCliente(id, updatedDataCliente){
+        const cliente = await Cliente.update(updatedDataCliente, {where: id})
         return cliente
     }
 
@@ -51,8 +51,8 @@ class Controller{
     }
 
     //funcao para fazer update em um produto
-    async updateProduto(id, updatedData){
-        const cliente = await Produto.update(updatedData, {where: id})
+    async updateProduto(id, updatedDataProduto){
+        const cliente = await Produto.update(updatedDataProduto, {where: id})
         return cliente
     }
 
@@ -76,8 +76,8 @@ class Controller{
     }
 
     //funcao para dar update em uma categoria de produto
-    async updateCategoriaProduto(id, updatedData){
-        const categoriaProduto = await CategoriaProduto.update(updatedData,{where:id})
+    async updateCategoriaProduto(id, updatedDataCategoria){
+        const categoriaProduto = await CategoriaProduto.update(updatedDataCategoria,{where:id})
     }
 
     //funcao para deletar uma categoria de produto
@@ -103,8 +103,8 @@ class Controller{
     }
 
     //funcao para dar update em Forma de Pagamento
-    async updateFormaPagamento(id,updatedData){
-        const formaPagamento = await FormaPagamento.update(updatedData,{where:id});
+    async updateFormaPagamento(id,updatedDataFormaPagamento){
+        const formaPagamento = await FormaPagamento.update(updatedDataFormaPagamento,{where:id});
         return formaPagamento
     }
 
@@ -132,6 +132,9 @@ class Controller{
     }
 
     //funcao para dar update em Venda
+    async updateVenda(id,updatedDataVenda){
+        const venda = await Venda.update(updatedDataVenda,{where:id})
+    }
 
     //funcao para deletar Venda
     async deleteVenda(id){
@@ -166,7 +169,9 @@ class Controller{
     }
     
     //funcao para buscar a quantidade de venda de um produto tal
-
+    //funcao para filtrar as vendas por data
+    //funcao para dar o valor total obtido com as vendas
+    //funcoes para dar o valor total obtido com as vendas a partir de alguns critérios
 }
 
 export default new Controller()

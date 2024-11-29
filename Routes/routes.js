@@ -3,6 +3,7 @@ import express, { Router } from "express";
 
 const routes = express.Router()
 
+//rota http para criar cliente
 routes.post('/createCliente',async (req,res)=> {
 
     const {nomeCliente,cpfCliente,emailCliente} = req.body;
@@ -15,6 +16,7 @@ routes.post('/createCliente',async (req,res)=> {
     }
 })
 
+//rota http para mostrar clientes
 routes.get('findAllClientes',async(req,res) =>{
     
     try {
@@ -25,6 +27,7 @@ routes.get('findAllClientes',async(req,res) =>{
     }
 })
 
+//rota http para fazer upload no cliente
 routes.put('/updateCliente',async(req,res)=>{
     try {
         const cliente = await Controller.updateCliente(id, updatedData);
@@ -34,6 +37,7 @@ routes.put('/updateCliente',async(req,res)=>{
     }
 })
 
+//rota http para deletar cliente
 routes.delete('/deleteCliente/:id', async(req,res)=>{
     const {id} = req.params;
     try {
@@ -44,6 +48,7 @@ routes.delete('/deleteCliente/:id', async(req,res)=>{
     }
 })
 
+//rota http para criar produto
 routes.post('/createProduto',async (req,res) =>{
     const {nomeProduto,estoqueProduto,valorProduto,categoriaProduto_id} = req.body;
 
@@ -55,6 +60,7 @@ routes.post('/createProduto',async (req,res) =>{
     }
 })
 
+//rota http para mostrar todos produtos
 routes.get('/findAllProdutos', async (req,res) => {
     try {
         const produtos = await Controller.findAllProdutos();
@@ -64,6 +70,7 @@ routes.get('/findAllProdutos', async (req,res) => {
     }
 })
 
+//rota http para fazer update no produto
 routes.put('/updateProduto/:id', async (req,res) => {
     const {id} = req.params;
     try {
@@ -74,6 +81,7 @@ routes.put('/updateProduto/:id', async (req,res) => {
     }
 })
 
+//rota http para deletar produto
 routes.delete('/deleteProduto/:id', async (req,res) => {
     const {id} = req.params
 
@@ -85,6 +93,7 @@ routes.delete('/deleteProduto/:id', async (req,res) => {
     }
 })
 
+//rota http para criar categoria de produto
 routes.post('/createCategoriaProduto', async (req,res) => {
     const {nomeCategoria} = req.body
 
@@ -96,6 +105,7 @@ routes.post('/createCategoriaProduto', async (req,res) => {
     }
 })
 
+//rota http para mostrar todas as categorias de produto
 routes.get('/findAllCategoriaProdutos', async (req,res) => {
     try {
         const categoriaproduto = await Controller.findAllCategoriaProdutos()
@@ -105,6 +115,7 @@ routes.get('/findAllCategoriaProdutos', async (req,res) => {
     }
 })
 
+//rota http para fazer update na categoria de produto
 routes.put('/updateCategoriaProduto/:id', async (req,res) =>{
     const {id} = req.params
 
@@ -116,6 +127,7 @@ routes.put('/updateCategoriaProduto/:id', async (req,res) =>{
     }
 })
 
+//rota http para deletar categoria de produto
 routes.delete('/deleteCategoriaProduto/:id', async (req,res) => {
     const {id} = req.params
 
@@ -127,6 +139,7 @@ routes.delete('/deleteCategoriaProduto/:id', async (req,res) => {
     }
 })
 
+//rota http para criar forma de pagamento
 routes.post('/createFormaPagamento ', async (req,res) =>{
     const {nomeFormaPagamento} = req.body
 
@@ -138,6 +151,7 @@ routes.post('/createFormaPagamento ', async (req,res) =>{
     }
 })
 
+//rota http para mostrar todas as formas de pagamento
 routes.get('/findAllFormaPagamento',async (req,res) =>{
     try {
         const formaPagamentos = await Controller.findAllFormaPagamento()
@@ -147,6 +161,7 @@ routes.get('/findAllFormaPagamento',async (req,res) =>{
     }
 })
 
+//rota http para fazer update na forma de pagamento
 routes.put('/updateFormaPagamento/:id', async(req,res) =>{
     const {id} = req.params
 
@@ -158,12 +173,59 @@ routes.put('/updateFormaPagamento/:id', async(req,res) =>{
     }
 })
 
+//rota http para deletar forma de pagamento
 routes.delete('/deleteFormaPagamento/:id', async(req,res) =>{
     const {id} = req.params
 
     try {
         const formaPagamento = await Controller.deleteFormaPagamento({id});
         return res.json(formaPagamento)
+    } catch (error) {
+        return res.json(error)
+    }
+})
+
+//rota http para criar venda
+routes.post('/createVenda', async(req,res) =>{
+    const {produto_id, cliente_id, valorPago, formaPagamento_id} = req.body
+
+    try {
+        const venda = await Controller.createVenda({produto_id, cliente_id, valorPago, formaPagamento_id});
+        return res.json(venda)
+    } catch (error) {
+        return res.json(error)
+    }
+})
+
+//rota http para mostrar todas as vendas
+routes.get('/findAllVendas', async (req,res)=>{
+    try {
+        const vendas = await Controller.findAllVendas();
+        return res.json(vendas)
+    } catch (error) {
+        return res.json(error)
+    }
+})
+
+//rota http para fazer update na venda
+routes.put('/updateVenda/:id', async(req,res) =>{
+    const {id} = req.params;
+
+    try {
+        const venda = await Controller.updateVenda({id});
+        return res.json(venda)
+    } catch (error) {
+        return res.json(error)
+    }
+})
+
+//rota http para deletar venda
+routes.delete('/deleteVenda/:id', async(req,res)=>{
+    const {id} = req.params
+
+    try {
+        const venda = await Controller.deleteVenda({id});
+        return res.json(venda)
     } catch (error) {
         return res.json(error)
     }
