@@ -9,7 +9,7 @@ class Controller{
 
     //funcao para cadastrar novos clientes
     async createCliente(nomeCliente,cpfCliente,emailCliente){
-        const cliente = await Cliente.create(nomeCliente,cpfCliente,emailCliente)
+        const cliente = await Cliente.create({nomeCliente,cpfCliente,emailCliente})
         return {message:"Cliente criado com sucesso:",cliente}
     }
 
@@ -33,7 +33,7 @@ class Controller{
 
     //funcao para cadstrar novos produtos
     async createProduto(nomeProduto,estoqueProduto,valorProduto,categoriaProduto_id){
-        const produto = await Produto.create(nomeProduto,valorProduto,categoriaProduto_id)
+        const produto = await Produto.create({nomeProduto,valorProduto,categoriaProduto_id})
 
         await EstoqueProduto.create({
             produto_id: produto.id,
@@ -60,6 +60,7 @@ class Controller{
     //funcao para deletar produto
     async deleteProduto(id){
         const produto = await Produto.destroy({where:{id}})
+        await EstoqueProduto.destroy({where:{produto_id:id}})
         return {message:"Produto deletado com sucesso",produto}
     }
 
@@ -123,11 +124,11 @@ class Controller{
 
     //funcao para mostrar Vendas cadastrado
     async findAllVendas(){
-        const vendas = await Venda.findAll({
-            include: Venda,
-            include: Cliente,
-            include: FormaPagamento
-        })
+        const vendas = await Venda.findAll({include:[
+            {model:Produto},
+            {model:Cliente},
+            {model:FormaPagamento}
+        ]})
         return vendas
     }
 
@@ -167,11 +168,26 @@ class Controller{
         })
         return vendas
     }
+
+    //funcao para contar a quantidade total de clientes dentro do sistema
+    async countClientes(){
+        const totalClientes = Cliente.count()
+        return totalClientes
+    }
+    
+    //funcao para contar a quantidade total de produtos dentro do sistema
+    async countProdutos(){
+        const totalProdutos = Produto.count()
+        return totalProdutos
+    }
+
+    
     
     //funcao para buscar a quantidade de venda de um produto tal
     //funcao para filtrar as vendas por data
     //funcao para dar o valor total obtido com as vendas
     //funcoes para dar o valor total obtido com as vendas a partir de alguns critérios
+    //funcao para aumentar a quantidade de estoque de um produto
 }
 
 export default new Controller()
